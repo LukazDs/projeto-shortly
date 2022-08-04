@@ -7,4 +7,9 @@ const customerSchema = joi.object({
     confirmPassword: joi.string().trim().required()
 })
 
-export { customerSchema };
+const loginSchema = joi.object({
+    email: joi.string().email().trim().required(),
+    password: joi.string().trim().required(),
+})
+
+export { customerSchema, loginSchema };
