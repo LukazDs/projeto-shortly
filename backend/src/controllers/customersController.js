@@ -1,14 +1,21 @@
 import connection from "../dbStrategy/database.js";
 
-export async function getCustomers(_req, res) {
+export async function insertCustomer(req, res) {
 
     try {
 
-        let query = `SELECT * FROM customers`;
+        const { name, email, password } = req.body;
 
-        const { rows: customers } = await connection.query(query);
+        const params = [name, email, password];
 
-        res.send(customers);
+        const query = `
+            INSERT INTO customers (name, email, password)
+            VALUES ($1, $2, $3)
+        `;
+
+        const { rows: customers } = await connection.query(query, params);
+
+        res.send(200);
 
     } catch (error) {
 
