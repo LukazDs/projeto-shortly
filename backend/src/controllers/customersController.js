@@ -32,3 +32,27 @@ export async function insertCustomer(req, res) {
 
     }
 }
+
+export async function loginCustomer(req, res) {
+
+    try {
+
+        const validation = customerSchema.validate(req.body);
+
+        if (validation.error) {
+
+            res.sendStatus(422);
+            return;
+
+        }        
+
+        const { email, password } = req.body;
+
+        res.sendStatus(200);
+
+    } catch (error) {
+
+        res.sendStatus(500);
+
+    }
+}
