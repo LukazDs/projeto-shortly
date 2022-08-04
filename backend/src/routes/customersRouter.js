@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import { insertCustomer } from '../controllers/customersController.js';
+import { validateCustomer } from '../middlewares/validateCustomer.js';
 
 const router = Router();
 
-router.get('/customers', insertCustomer);
+router.post('/signup', validateCustomer, insertCustomer);
 
 export default router;

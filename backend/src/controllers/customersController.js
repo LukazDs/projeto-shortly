@@ -1,11 +1,20 @@
 import connection from "../dbStrategy/database.js";
+import { customerSchema } from "../schemas/customerSchema.js";
 
 export async function insertCustomer(req, res) {
 
     try {
 
-        const { name, email, password } = req.body;
+        const validation = customerSchema.validate(req.body);
 
+        if (validation.error) {
+
+            res.sendStatus(422);
+            return;
+
+        }        
+
+        const { name, email, password } = req.body;
         const params = [name, email, password];
 
         const query = `
@@ -13,9 +22,9 @@ export async function insertCustomer(req, res) {
             VALUES ($1, $2, $3)
         `;
 
-        const { rows: customers } = await connection.query(query, params);
+        await connection.query(query, params);
 
-        res.send(200);
+        res.sendStatus(201);
 
     } catch (error) {
 
