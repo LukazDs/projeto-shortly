@@ -10,11 +10,6 @@ export async function shortenUrl(req, res) {
 
     try {
 
-        const { authorization } = req.headers;
-        const token = authorization?.replace('Bearer ', '');
-
-        jwt.verify(token, process.env.JWT_SECRET);
-
         res.sendStatus(201);
 
     } catch (error) {
