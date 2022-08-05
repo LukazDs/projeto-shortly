@@ -54,11 +54,7 @@ export async function loginCustomer(req, res) {
 
         }
 
-
-
         const token = jwt.sign(req.body, process.env.JWT_SECRET);
-
-        /// falta gerar o token -> JWT :(
 
         res.status(200).send({ token });
 
