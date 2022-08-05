@@ -1,6 +1,6 @@
 import connection from "../dbStrategy/database.js";
 import bcrypt from 'bcrypt';
-import { customerSchema } from "../schemas/customerSchema.js";
+import { customerSchema, loginSchema } from "../schemas/customerSchema.js";
 
 export async function insertCustomer(req, res) {
 
@@ -26,8 +26,6 @@ export async function insertCustomer(req, res) {
             VALUES ($1, $2, $3)
         `;
 
-        /// falta criptografar o password ;)
-
         await connection.query(query, params);
 
         res.sendStatus(201);
@@ -43,7 +41,7 @@ export async function loginCustomer(req, res) {
 
     try {
 
-        const validation = customerSchema.validate(req.body);
+        const validation = loginSchema.validate(req.body)
 
         if (validation.error) {
 
