@@ -1,6 +1,10 @@
 import connection from "../dbStrategy/database.js";
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 import { customerSchema, loginSchema } from "../schemas/customerSchema.js";
+
+dotenv.config();
 
 export async function insertCustomer(req, res) {
 
@@ -50,9 +54,13 @@ export async function loginCustomer(req, res) {
 
         }
 
+
+
+        const token = jwt.sign(req.body, process.env.JWT_SECRET);
+
         /// falta gerar o token -> JWT :(
-        
-        res.sendStatus(200);
+
+        res.status(200).send({ token });
 
     } catch (error) {
 
