@@ -1,5 +1,6 @@
 import connection from "../dbStrategy/database.js";
-import { customerSchema } from "../schemas/customerSchema.js";
+import bcrypt from 'bcrypt';
+import { customerSchema, loginSchema } from "../schemas/customerSchema.js";
 
 export async function insertCustomer(req, res) {
 
@@ -15,7 +16,10 @@ export async function insertCustomer(req, res) {
         }
 
         const { name, email, password } = req.body;
-        const params = [name, email, password];
+
+        const passwordHash = bcrypt.hashSync(password, 10);
+
+        const params = [name, email, passwordHash];
 
         const query = `
             INSERT INTO customers (name, email, password)
@@ -37,7 +41,7 @@ export async function loginCustomer(req, res) {
 
     try {
 
-        const validation = customerSchema.validate(req.body);
+        const validation = loginSchema.validate(req.body)
 
         if (validation.error) {
 
@@ -45,6 +49,8 @@ export async function loginCustomer(req, res) {
             return;
 
         }
+
+        /// falta gerar o token -> JWT :(
         
         res.sendStatus(200);
 
