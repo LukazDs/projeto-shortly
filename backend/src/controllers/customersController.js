@@ -1,4 +1,5 @@
 import connection from "../dbStrategy/database.js";
+import bcrypt from 'bcrypt';
 import { customerSchema } from "../schemas/customerSchema.js";
 
 export async function insertCustomer(req, res) {
@@ -15,12 +16,17 @@ export async function insertCustomer(req, res) {
         }
 
         const { name, email, password } = req.body;
-        const params = [name, email, password];
+
+        const passwordHash = bcrypt.hashSync(password, 10);
+
+        const params = [name, email, passwordHash];
 
         const query = `
             INSERT INTO customers (name, email, password)
             VALUES ($1, $2, $3)
         `;
+
+        /// falta criptografar o password ;)
 
         await connection.query(query, params);
 
@@ -45,6 +51,8 @@ export async function loginCustomer(req, res) {
             return;
 
         }
+
+        /// falta gerar o token -> JWT :(
         
         res.sendStatus(200);
 
