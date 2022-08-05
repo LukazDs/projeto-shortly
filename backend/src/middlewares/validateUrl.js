@@ -27,10 +27,6 @@ async function validateAuthorizationUrl(req, res, next) {
         res.sendStatus(401);
 
     }
-
-    
- 
-
 }
 
 export { validateAuthorizationUrl };
