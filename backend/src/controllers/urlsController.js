@@ -1,5 +1,6 @@
 import connection from "../dbStrategy/database.js";
 import jwt from 'jsonwebtoken';
+import { nanoid } from 'nanoid';
 import dotenv from 'dotenv';
 import urlSchema from "../schemas/urlSchema.js";
 
@@ -11,14 +12,16 @@ export async function shortenUrl(req, res) {
 
         const validation = urlSchema.validate(req.body);
 
-        if(validation.error) {
-            
+        if (validation.error) {
+
             res.sendStatus(422);
             return;
 
         }
 
-        res.sendStatus(201);
+        const shortUrl = nanoid(8).toLowerCase();
+
+        res.status(201).send({ shortUrl });
 
     } catch (error) {
 
