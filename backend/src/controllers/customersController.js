@@ -12,7 +12,7 @@ export async function insertCustomer(req, res) {
             res.sendStatus(422);
             return;
 
-        }        
+        }
 
         const { name, email, password } = req.body;
         const params = [name, email, password];
@@ -44,10 +44,8 @@ export async function loginCustomer(req, res) {
             res.sendStatus(422);
             return;
 
-        }        
-
-        const { email, password } = req.body;
-
+        }
+        
         res.sendStatus(200);
 
     } catch (error) {

@@ -18,4 +18,22 @@ async function validateCustomer(req, res, next) {
 
 }
 
-export {validateCustomer};
+async function validateLogin(req, res) {
+    
+    const { email, password } = req.body;
+
+    const query = `
+            SELECT * FROM customers 
+            WHERE email = $1 AND password = $2
+        `;
+
+    const { rows: infoUser } = await connection(query, [email, password]);
+
+    if (!infoUser.length) {
+
+        res.sendStatus(401);
+
+    }
+}
+
+export { validateCustomer, validateLogin };
