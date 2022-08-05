@@ -54,7 +54,7 @@ export async function loginCustomer(req, res) {
 
         }
 
-        const token = jwt.sign(req.body, process.env.JWT_SECRET);
+        const token = jwt.sign(req.body.email, process.env.JWT_SECRET);
 
         res.status(200).send({ token });
 
