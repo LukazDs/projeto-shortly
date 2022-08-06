@@ -21,9 +21,11 @@ export async function shortenUrl(req, res) {
 
         const shortUrl = nanoid(8).toLowerCase();
 
-        const query = `INSERT INTO urls (url, "shortUrl") VALUES ($1, $2)`;
-        
-        await connection.query(query, [req.body.url, shortUrl])
+        const { userId } = res.locals;
+
+        const query = `INSERT INTO urls (url, "shortUrl", "customerId") VALUES ($1, $2, $3)`;
+
+        await connection.query(query, [req.body.url, shortUrl, userId])
 
         res.status(201).send({ shortUrl });
 

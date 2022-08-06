@@ -20,9 +20,11 @@ async function validateAuthorizationUrl(req, res, next) {
 
         };
 
+        res.locals.userId = infoUser[0].id;
+
         next();
 
-    } catch(error) {
+    } catch (error) {
 
         res.sendStatus(401);
 
