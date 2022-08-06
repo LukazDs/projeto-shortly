@@ -35,3 +35,21 @@ export async function shortenUrl(req, res) {
 
     }
 }
+
+export async function getUrl(_req, res) {
+
+    try {
+
+        const { urlDb } = res.locals;
+
+        const { url, shortUrl, visitCount } = urlDb[0];
+        const payload = { url, shortUrl, visitCount };
+
+        res.status(200).send(payload);
+
+    } catch (error) {
+
+        res.sendStatus(500);
+
+    }
+}
