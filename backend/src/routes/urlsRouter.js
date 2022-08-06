@@ -6,5 +6,6 @@ const router = Router();
 
 router.post('/urls/shorten', validateAuthorizationUrl, shortenUrl);
 router.get('/urls/:id', validateUrlById, getUrl);
+router.get('/urls/open/:shortUrl');
 
 export default router;

@@ -58,4 +58,31 @@ async function validateUrlById(req, res, next) {
     }
 }
 
-export { validateAuthorizationUrl, validateUrlById };
+async function validateUrlByShortUrl(req, res, next) {
+
+    try {
+
+        const { shortUrl } = req.params;
+
+        const query = `SELECT * FROM urls WHERE "shortUrl" = $1`;
+        const { rows: urlDb } = await connection.query(query, [shortUrl]);
+
+        if(!urlDb) {
+
+            res.sendStatus(404);
+            return;
+
+        }
+
+        res.locals.urlDb = urlDb;
+
+        next();
+
+    } catch (error) {
+
+        res.sendStatus(401);
+
+    }
+}
+
+export { validateAuthorizationUrl, validateUrlById, validateUrlByShortUrl };

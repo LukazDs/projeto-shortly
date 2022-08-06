@@ -42,10 +42,23 @@ export async function getUrl(_req, res) {
 
         const { urlDb } = res.locals;
 
-        const { url, shortUrl, visitCount } = urlDb[0];
-        const payload = { url, shortUrl, visitCount };
+        const { id, url, shortUrl } = urlDb[0];
+        const payload = { id, url, shortUrl };
 
         res.status(200).send(payload);
+
+    } catch (error) {
+
+        res.sendStatus(500);
+
+    }
+}
+
+export async function openUrl(req, res) {
+
+    try {
+
+        res.status(200);
 
     } catch (error) {
 
