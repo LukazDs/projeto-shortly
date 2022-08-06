@@ -54,11 +54,20 @@ export async function getUrl(_req, res) {
     }
 }
 
-export async function openUrl(req, res) {
+export async function openUrl(_req, res) {
 
     try {
 
-        res.status(200);
+        const { urlDb } = res.locals;
+
+        const { visitCount, id, url } = urlDb[0]
+
+        const newVisitCount = `${Number(visitCount) + 1}`;
+
+        const query = `UPDATE urls SET "visitCount" = $1 WHERE id = $2`;
+        await connection.query(query, [newVisitCount, id]);
+
+        res.redirect(url);
 
     } catch (error) {
 
