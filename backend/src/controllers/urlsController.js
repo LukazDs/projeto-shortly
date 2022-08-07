@@ -60,14 +60,22 @@ export async function getUrlsMe(_req, res) {
 
         const { userId } = res.locals;
 
-        const query = `
+        let query = `
             SELECT customers.id, customers.name, SUM(urls."visitCount") AS "visitCount" FROM urls JOIN customers ON customers.id = urls."customerId" 
             WHERE customers.id = $1 
             GROUP BY urls."customerId", customers.id`;
 
         const { rows: infoUser } = await connection.query(query, [userId]);
 
-        res.status(200).send(infoUser);
+        query = `
+            SELECT urls.id, urls."shortUrl", urls.url, urls."visitCount" FROM urls 
+            WHERE urls."customerId" = $1`;
+
+        const { rows: infoUrls } = await connection.query(query, [userId]);
+
+        const body = { ...infoUser[0], shortenedUrls: infoUrls };
+
+        res.status(200).send(body);
 
     } catch (error) {
 

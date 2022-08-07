@@ -33,10 +33,10 @@ async function validateAuthorizationUrl(req, res, next) {
 
 async function validateUrlById(req, res, next) {
 
-    const { id } = req.params;
+    const userId = req.params.id ? req.params.id : res.locals.userId;
 
     const query = `SELECT * FROM urls WHERE id = $1`;
-    const { rows: urlDb } = await connection.query(query, [id]);
+    const { rows: urlDb } = await connection.query(query, [userId]);
 
     if (!urlDb.length) {
 
@@ -76,8 +76,6 @@ async function validateUrlIdByCustomer(_req, res, next) {
     const { userId, urlDb } = res.locals;
 
     if (userId !== urlDb[0].customerId) {
-
-        console.log(userId !== urlDb[0].customerId)
 
         res.sendStatus(401);
         return;

@@ -39,14 +39,14 @@ async function validateLogin(req, res, next) {
 
     if (!infoUser.length) {
 
-        res.status(401).send("Email ou password inválidos");
+        res.sendStatus(401);
         return;
 
     }
 
     if (!bcrypt.compareSync(password, infoUser[0].password)) {
 
-        res.status(401).send("Email ou password inválidos");
+        res.sendStatus(401);
         return;
 
     }
