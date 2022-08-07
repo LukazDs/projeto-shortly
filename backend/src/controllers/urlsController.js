@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
 import dotenv from 'dotenv';
 import urlSchema from "../schemas/urlSchema.js";
+import { query } from "express";
 
 dotenv.config();
 
@@ -76,11 +77,14 @@ export async function openUrl(_req, res) {
     }
 }
 
-export async function deleteUrl(_req, res) {
+export async function deleteUrl(req, res) {
 
     try {
 
-        console.log(res.locals)
+        const { id } = req.params;
+
+        const query = `DELETE FROM urls WHERE id = $1`;
+        await connection.query(query, [id]);
 
         res.sendStatus(204);
 

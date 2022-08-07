@@ -13,7 +13,7 @@ async function validateAuthorizationUrl(req, res, next) {
         const query = `SELECT * FROM customers WHERE email = $1`;
         const { rows: infoUser } = await connection.query(query, [email]);
 
-        if (!infoUser) {
+        if (!infoUser.length) {
 
             res.sendStatus(401);
             return;
@@ -33,80 +33,59 @@ async function validateAuthorizationUrl(req, res, next) {
 
 async function validateUrlById(req, res, next) {
 
-    try {
+    const { id } = req.params;
 
-        const { id } = req.params;
+    const query = `SELECT * FROM urls WHERE id = $1`;
+    const { rows: urlDb } = await connection.query(query, [id]);
 
-        const query = `SELECT * FROM urls WHERE id = $1`;
-        const { rows: urlDb } = await connection.query(query, [id]);
+    if (!urlDb.length) {
 
-        if (!urlDb) {
-
-            res.sendStatus(404);
-            return;
-
-        }
-
-        res.locals.urlDb = urlDb;
-
-        next();
-
-    } catch (error) {
-
-        res.sendStatus(401);
+        res.sendStatus(404);
+        return;
 
     }
+
+    res.locals.urlDb = urlDb;
+
+    next();
+
 }
 
 async function validateUrlByShortUrl(req, res, next) {
 
-    try {
+    const { shortUrl } = req.params;
 
-        const { shortUrl } = req.params;
+    const query = `SELECT * FROM urls WHERE "shortUrl" = $1`;
+    const { rows: urlDb } = await connection.query(query, [shortUrl]);
 
-        const query = `SELECT * FROM urls WHERE "shortUrl" = $1`;
-        const { rows: urlDb } = await connection.query(query, [shortUrl]);
+    if (!urlDb.length) {
 
-        if (!urlDb) {
-
-            res.sendStatus(404);
-            return;
-
-        }
-
-        res.locals.urlDb = urlDb;
-
-        next();
-
-    } catch (error) {
-
-        res.sendStatus(500);
+        res.sendStatus(404);
+        return;
 
     }
+
+    res.locals.urlDb = urlDb;
+
+    next();
+
 }
 
-async function validateUrlIdByCustomer(req, res, next) {
+async function validateUrlIdByCustomer(_req, res, next) {
 
-    try {
+    const { userId, urlDb } = res.locals;
 
-        const { userId, urlDb } = res.locals;
+    if (userId !== urlDb[0].customerId) {
 
-        if (userId !== urlDb[0].customerId) {
+        console.log(userId !== urlDb[0].customerId)
 
-            res.sendStatus(401);
-            return;
-
-        }
-
-        res.locals.urlDb = urlDb;
-
-        next();
-
-    } catch (error) {
-
-        res.sendStatus(500);
+        res.sendStatus(401);
+        return;
 
     }
+
+    next();
+
 }
 
 export {
