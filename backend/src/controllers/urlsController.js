@@ -75,3 +75,18 @@ export async function openUrl(_req, res) {
 
     }
 }
+
+export async function deleteUrl(_req, res) {
+
+    try {
+
+        console.log(res.locals)
+
+        res.sendStatus(204);
+
+    } catch (error) {
+
+        res.sendStatus(500);
+
+    }
+}

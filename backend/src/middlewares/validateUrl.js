@@ -40,7 +40,7 @@ async function validateUrlById(req, res, next) {
         const query = `SELECT * FROM urls WHERE id = $1`;
         const { rows: urlDb } = await connection.query(query, [id]);
 
-        if(!urlDb) {
+        if (!urlDb) {
 
             res.sendStatus(404);
             return;
@@ -67,7 +67,7 @@ async function validateUrlByShortUrl(req, res, next) {
         const query = `SELECT * FROM urls WHERE "shortUrl" = $1`;
         const { rows: urlDb } = await connection.query(query, [shortUrl]);
 
-        if(!urlDb) {
+        if (!urlDb) {
 
             res.sendStatus(404);
             return;
@@ -80,9 +80,38 @@ async function validateUrlByShortUrl(req, res, next) {
 
     } catch (error) {
 
-        res.sendStatus(401);
+        res.sendStatus(500);
 
     }
 }
 
-export { validateAuthorizationUrl, validateUrlById, validateUrlByShortUrl };
+async function validateUrlIdByCustomer(req, res, next) {
+
+    try {
+
+        const { userId, urlDb } = res.locals;
+
+        if (userId !== urlDb[0].customerId) {
+
+            res.sendStatus(401);
+            return;
+
+        }
+
+        res.locals.urlDb = urlDb;
+
+        next();
+
+    } catch (error) {
+
+        res.sendStatus(500);
+
+    }
+}
+
+export {
+    validateAuthorizationUrl,
+    validateUrlById,
+    validateUrlByShortUrl,
+    validateUrlIdByCustomer
+};

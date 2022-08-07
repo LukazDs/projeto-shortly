@@ -1,5 +1,7 @@
 import connection from "../dbStrategy/database.js";
 import bcrypt from 'bcrypt';
+import { loginSchema } from "../schemas/customerSchema.js";
+
 
 async function validateCustomer(req, res, next) {
 
@@ -20,8 +22,17 @@ async function validateCustomer(req, res, next) {
 }
 
 async function validateLogin(req, res, next) {
-    
+
     const { email, password } = req.body;
+
+    const validation = loginSchema.validate(req.body)
+
+    if (validation.error) {
+
+        res.sendStatus(422);
+        return;
+
+    }
 
     const query = `SELECT * FROM customers  WHERE email = $1`;
     const { rows: infoUser } = await connection.query(query, [email]);

@@ -2,7 +2,7 @@ import connection from "../dbStrategy/database.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { customerSchema, loginSchema } from "../schemas/customerSchema.js";
+import { customerSchema } from "../schemas/customerSchema.js";
 
 dotenv.config();
 
@@ -44,15 +44,6 @@ export async function insertCustomer(req, res) {
 export async function loginCustomer(req, res) {
 
     try {
-
-        const validation = loginSchema.validate(req.body)
-
-        if (validation.error) {
-
-            res.sendStatus(422);
-            return;
-
-        }
 
         const token = jwt.sign(req.body.email, process.env.JWT_SECRET);
 
