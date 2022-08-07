@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
 import dotenv from 'dotenv';
 import urlSchema from "../schemas/urlSchema.js";
-import { query } from "express";
 
 dotenv.config();
 
@@ -47,6 +46,28 @@ export async function getUrl(_req, res) {
         const payload = { id, url, shortUrl };
 
         res.status(200).send(payload);
+
+    } catch (error) {
+
+        res.sendStatus(500);
+
+    }
+}
+
+export async function getUrlsMe(_req, res) {
+
+    try {
+
+        const { userId } = res.locals;
+
+        const query = `
+            SELECT customers.id, customers.name, SUM(urls."visitCount") AS "visitCount" FROM urls JOIN customers ON customers.id = urls."customerId" 
+            WHERE customers.id = $1 
+            GROUP BY urls."customerId", customers.id`;
+
+        const { rows: infoUser } = await connection.query(query, [userId]);
+
+        res.status(200).send(infoUser);
 
     } catch (error) {
 
