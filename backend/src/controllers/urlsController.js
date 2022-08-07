@@ -1,5 +1,4 @@
 import connection from "../dbStrategy/database.js";
-import jwt from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
 import dotenv from 'dotenv';
 import urlSchema from "../schemas/urlSchema.js";
