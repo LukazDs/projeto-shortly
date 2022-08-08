@@ -58,7 +58,7 @@ export async function openUrl(_req, res) {
 
         const bindParams = [newVisitCount, id];
 
-        await connection.query(query, bindParams);
+        await urlRepository.updateVisitCountUrl(bindParams);
 
         res.status(200).redirect(url);
 
