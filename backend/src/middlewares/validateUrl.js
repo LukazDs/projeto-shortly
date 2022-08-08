@@ -1,12 +1,10 @@
-import connection from "../dbStrategy/database.js";
-import urlSchema from "../schemas/urlSchema.js";
+import { urlRepository } from "../repositories/getUrl.js";
 
 async function validateUrlById(req, res, next) {
 
     const userId = req.params.id ? req.params.id : res.locals.userId;
 
-    const query = `SELECT * FROM urls WHERE id = $1`;
-    const { rows: urlDb } = await connection.query(query, [userId]);
+    const { rows: urlDb } = await urlRepository.getUrlById(userId);
 
     if (!urlDb.length) {
 
@@ -23,19 +21,9 @@ async function validateUrlById(req, res, next) {
 
 async function validateUrlByShortUrl(req, res, next) {
 
-    const validation = urlSchema.validate(req.body);
-
-    if (validation.error) {
-
-        res.sendStatus(422);
-        return;
-
-    }
-
     const { shortUrl } = req.params;
 
-    const query = `SELECT * FROM urls WHERE "shortUrl" = $1`;
-    const { rows: urlDb } = await connection.query(query, [shortUrl]);
+    const { rows: urlDb } = await urlRepository.getUrlByShortUrl(shortUrl);
 
     if (!urlDb.length) {
 

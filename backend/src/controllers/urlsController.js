@@ -1,6 +1,7 @@
 import connection from "../dbStrategy/database.js";
 import { nanoid } from 'nanoid';
 import dotenv from 'dotenv';
+import { urlRepository } from "../repositories/getUrl.js";
 
 dotenv.config();
 
@@ -14,11 +15,9 @@ export async function shortenUrl(req, res) {
 
         const { userId } = res.locals;
 
-        const query = `
-            INSERT INTO urls (url, "shortUrl", "visitCount", "customerId") 
-            VALUES ($1, $2, $3, $4)`;
+        const bindParams = [req.body.url, shortUrl, VISIT_COUNT, userId];
 
-        await connection.query(query, [req.body.url, shortUrl, VISIT_COUNT, userId]);
+        await urlRepository.insertUrl(bindParams);
 
         res.status(201).send({ shortUrl });
 
@@ -57,8 +56,9 @@ export async function openUrl(_req, res) {
 
         const newVisitCount = `${Number(visitCount) + 1}`;
 
-        const query = `UPDATE urls SET "visitCount" = $1 WHERE id = $2`;
-        await connection.query(query, [newVisitCount, id]);
+        const bindParams = [newVisitCount, id];
+
+        await connection.query(query, bindParams);
 
         res.status(200).redirect(url);
 
@@ -75,7 +75,6 @@ export async function deleteUrl(req, res) {
 
         const { id } = req.params;
 
-        const query = `DELETE FROM urls WHERE id = $1`;
         await connection.query(query, [id]);
 
         res.sendStatus(204);

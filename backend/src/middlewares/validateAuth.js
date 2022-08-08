@@ -1,7 +1,7 @@
-import connection from "../dbStrategy/database.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { loginSchema, customerSchema } from "../schemas/customerSchema.js";
+import { userRepository } from "../repositories/getCustomer.js";
 
 async function validateAuthorization(req, res, next) {
 
@@ -12,8 +12,7 @@ async function validateAuthorization(req, res, next) {
 
         const email = jwt.verify(token, process.env.JWT_SECRET);
 
-        const query = `SELECT * FROM customers WHERE email = $1`;
-        const { rows: infoUser } = await connection.query(query, [email]);
+        const { rows: infoUser } = await userRepository.getCustomer(email);
 
         if (!infoUser.length) {
 
@@ -33,7 +32,7 @@ async function validateAuthorization(req, res, next) {
     }
 }
 
-async function validateCustomer(req, res, next) {
+async function validateInsertCustomer(req, res, next) {
 
     const validation = customerSchema.validate(req.body);
 
@@ -46,8 +45,7 @@ async function validateCustomer(req, res, next) {
 
     const { email } = req.body;
 
-    const query = 'SELECT * FROM customers WHERE email = $1';
-    const { rows: customers } = await connection.query(query, [email]);
+    const { rows: customers } = await userRepository.getCustomer(email);
 
     if (customers.length) {
 
@@ -73,8 +71,7 @@ async function validateLogin(req, res, next) {
 
     }
 
-    const query = `SELECT * FROM customers  WHERE email = $1`;
-    const { rows: infoUser } = await connection.query(query, [email]);
+    const { rows: infoUser } = await userRepository.getCustomer(email);
 
     if (!infoUser.length) {
 
@@ -94,4 +91,4 @@ async function validateLogin(req, res, next) {
 
 }
 
-export { validateCustomer, validateAuthorization, validateLogin };
+export { validateInsertCustomer, validateAuthorization, validateLogin };

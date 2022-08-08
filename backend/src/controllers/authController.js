@@ -1,7 +1,7 @@
-import connection from "../dbStrategy/database.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { userRepository } from "../repositories/getCustomer.js";
 
 dotenv.config();
 
@@ -13,14 +13,9 @@ export async function insertCustomer(req, res) {
 
         const passwordHash = bcrypt.hashSync(password, 10);
 
-        const params = [name, email, passwordHash];
+        const bindParams = [name, email, passwordHash];
 
-        const query = `
-            INSERT INTO customers (name, email, password)
-            VALUES ($1, $2, $3)
-        `;
-
-        await connection.query(query, params);
+        await userRepository.insertCustomer(bindParams);
 
         res.sendStatus(201);
 
