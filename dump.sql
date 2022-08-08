@@ -24,7 +24,7 @@ SET default_table_access_method = heap;
 -- Name: customers; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.customers (
+CREATE TABLE customers (
     id integer NOT NULL,
     name text NOT NULL,
     email text NOT NULL,
@@ -33,13 +33,13 @@ CREATE TABLE public.customers (
 );
 
 
-ALTER TABLE public.customers OWNER TO postgres;
+ALTER TABLE customers OWNER TO postgres;
 
 --
 -- Name: customers_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.customers_id_seq
+CREATE SEQUENCE customers_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -48,20 +48,20 @@ CREATE SEQUENCE public.customers_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.customers_id_seq OWNER TO postgres;
+ALTER TABLE customers_id_seq OWNER TO postgres;
 
 --
 -- Name: customers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.customers_id_seq OWNED BY public.customers.id;
+ALTER SEQUENCE customers_id_seq OWNED BY customers.id;
 
 
 --
 -- Name: urls; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.urls (
+CREATE TABLE urls (
     id integer NOT NULL,
     url text NOT NULL,
     "shortUrl" text NOT NULL,
@@ -71,13 +71,13 @@ CREATE TABLE public.urls (
 );
 
 
-ALTER TABLE public.urls OWNER TO postgres;
+ALTER TABLE urls OWNER TO postgres;
 
 --
 -- Name: urls_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.urls_id_seq
+CREATE SEQUENCE urls_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -86,34 +86,34 @@ CREATE SEQUENCE public.urls_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.urls_id_seq OWNER TO postgres;
+ALTER TABLE urls_id_seq OWNER TO postgres;
 
 --
 -- Name: urls_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.urls_id_seq OWNED BY public.urls.id;
+ALTER SEQUENCE urls_id_seq OWNED BY urls.id;
 
 
 --
 -- Name: customers id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.customers ALTER COLUMN id SET DEFAULT nextval('public.customers_id_seq'::regclass);
+ALTER TABLE ONLY customers ALTER COLUMN id SET DEFAULT nextval('customers_id_seq'::regclass);
 
 
 --
 -- Name: urls id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.urls ALTER COLUMN id SET DEFAULT nextval('public.urls_id_seq'::regclass);
+ALTER TABLE ONLY urls ALTER COLUMN id SET DEFAULT nextval('urls_id_seq'::regclass);
 
 
 --
 -- Data for Name: customers; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.customers (id, name, email, password, "createdAt") FROM stdin;
+COPY customers (id, name, email, password, "createdAt") FROM stdin;
 \.
 
 
@@ -121,7 +121,7 @@ COPY public.customers (id, name, email, password, "createdAt") FROM stdin;
 -- Data for Name: urls; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.urls (id, url, "shortUrl", "createdAt", "visitCount", "customerId") FROM stdin;
+COPY urls (id, url, "shortUrl", "createdAt", "visitCount", "customerId") FROM stdin;
 \.
 
 
@@ -129,21 +129,21 @@ COPY public.urls (id, url, "shortUrl", "createdAt", "visitCount", "customerId") 
 -- Name: customers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.customers_id_seq', 1, false);
+SELECT pg_catalog.setval('customers_id_seq', 1, false);
 
 
 --
 -- Name: urls_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.urls_id_seq', 1, false);
+SELECT pg_catalog.setval('urls_id_seq', 1, false);
 
 
 --
 -- Name: customers customers_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.customers
+ALTER TABLE ONLY customers
     ADD CONSTRAINT customers_email_key UNIQUE (email);
 
 
@@ -151,7 +151,7 @@ ALTER TABLE ONLY public.customers
 -- Name: customers customers_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.customers
+ALTER TABLE ONLY customers
     ADD CONSTRAINT customers_pk PRIMARY KEY (id);
 
 
@@ -159,7 +159,7 @@ ALTER TABLE ONLY public.customers
 -- Name: urls urls_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.urls
+ALTER TABLE ONLY urls
     ADD CONSTRAINT urls_pk PRIMARY KEY (id);
 
 
@@ -167,8 +167,8 @@ ALTER TABLE ONLY public.urls
 -- Name: urls urls_fk0; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.urls
-    ADD CONSTRAINT urls_fk0 FOREIGN KEY ("customerId") REFERENCES public.customers(id);
+ALTER TABLE ONLY urls
+    ADD CONSTRAINT urls_fk0 FOREIGN KEY ("customerId") REFERENCES customers(id);
 
 
 --
