@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { loginSchema, customerSchema } from "../schemas/customerSchema.js";
 import { userRepository } from "../repositories/getCustomer.js";
 
 async function validateAuthorization(req, res, next) {
@@ -34,15 +33,6 @@ async function validateAuthorization(req, res, next) {
 
 async function validateInsertCustomer(req, res, next) {
 
-    const validation = customerSchema.validate(req.body);
-
-    if (validation.error) {
-
-        res.sendStatus(422);
-        return;
-
-    }
-
     const { email } = req.body;
 
     const { rows: customers } = await userRepository.getCustomer(email);
@@ -61,15 +51,6 @@ async function validateInsertCustomer(req, res, next) {
 async function validateLogin(req, res, next) {
 
     const { email, password } = req.body;
-
-    const validation = loginSchema.validate(req.body)
-
-    if (validation.error) {
-
-        res.sendStatus(422);
-        return;
-
-    }
 
     const { rows: infoUser } = await userRepository.getCustomer(email);
 
