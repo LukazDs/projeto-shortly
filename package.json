@@ -1,12 +1,11 @@
 {
   "name": "projeto16-shortly",
   "version": "1.0.0",
-  "description": "This project ",
+  "description": "",
   "main": "./backend/src/index.js",
   "type": "module",
   "scripts": {
-    "start": "node ./backend/src/index.js",
-    "dev": "nodemon ./backend/src/index.js"
+    "start": "node ./backend/src/index.js"
   },
   "author": "Lucas Ds",
   "license": "ISC",
@@ -18,7 +17,6 @@
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "nanoid": "^4.0.0",
-    "nodemon": "^2.0.19",
     "pg": "^8.7.3"
   }
 }
