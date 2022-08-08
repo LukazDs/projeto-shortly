@@ -1,43 +1,30 @@
 import connection from "../dbStrategy/database.js";
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 
-dotenv.config();
-
-export async function insertCustomer(req, res) {
+export async function getUrlsMe(_req, res) {
 
     try {
 
-        const { name, email, password } = req.body;
+        const { userId } = res.locals;
 
-        const passwordHash = bcrypt.hashSync(password, 10);
+        let query = `
+            SELECT customers.id, customers.name, coalesce(SUM(urls."visitCount"), 0)
+            AS "visitCount" 
+            FROM customers 
+            LEFT JOIN urls ON customers.id = urls."customerId" 
+            WHERE customers.id = $1 
+            GROUP BY urls."customerId", customers.id`;
 
-        const params = [name, email, passwordHash];
+        const { rows: infoUser } = await connection.query(query, [userId]);
 
-        const query = `
-            INSERT INTO customers (name, email, password)
-            VALUES ($1, $2, $3)
-        `;
+        query = `
+            SELECT urls.id, urls."shortUrl", urls.url, urls."visitCount" FROM urls 
+            WHERE urls."customerId" = $1`;
 
-        await connection.query(query, params);
+        const { rows: infoUrls } = await connection.query(query, [userId]);
 
-        res.sendStatus(201);
+        const body = { ...infoUser[0], shortenedUrls: infoUrls };
 
-    } catch (error) {
-
-        res.sendStatus(500);
-
-    }
-}
-
-export async function loginCustomer(req, res) {
-
-    try {
-
-        const token = jwt.sign(req.body.email, process.env.JWT_SECRET);
-
-        res.status(200).send({ token });
+        res.status(200).send(body);
 
     } catch (error) {
 
