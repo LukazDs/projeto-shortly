@@ -88,7 +88,7 @@ export async function openUrl(_req, res) {
         const query = `UPDATE urls SET "visitCount" = $1 WHERE id = $2`;
         await connection.query(query, [newVisitCount, id]);
 
-        res.redirect(url);
+        res.status(200).redirect(url);
 
     } catch (error) {
 
