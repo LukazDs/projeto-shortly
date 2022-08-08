@@ -1,9 +1,18 @@
 import connection from "../dbStrategy/database.js";
 import bcrypt from 'bcrypt';
-import { loginSchema } from "../schemas/customerSchema.js";
+import { loginSchema, customerSchema } from "../schemas/customerSchema.js";
 
 
 async function validateCustomer(req, res, next) {
+
+    const validation = customerSchema.validate(req.body);
+
+    if (validation.error) {
+
+        res.sendStatus(422);
+        return;
+
+    }
 
     const { email } = req.body;
 

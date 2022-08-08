@@ -1,5 +1,6 @@
 import connection from "../dbStrategy/database.js";
 import jwt from 'jsonwebtoken';
+import urlSchema from "../schemas/urlSchema.js";
 
 async function validateAuthorizationUrl(req, res, next) {
 
@@ -52,6 +53,15 @@ async function validateUrlById(req, res, next) {
 }
 
 async function validateUrlByShortUrl(req, res, next) {
+
+    const validation = urlSchema.validate(req.body);
+
+    if (validation.error) {
+
+        res.sendStatus(422);
+        return;
+
+    }
 
     const { shortUrl } = req.params;
 

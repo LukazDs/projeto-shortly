@@ -1,7 +1,6 @@
 import connection from "../dbStrategy/database.js";
 import { nanoid } from 'nanoid';
 import dotenv from 'dotenv';
-import urlSchema from "../schemas/urlSchema.js";
 
 dotenv.config();
 
@@ -9,22 +8,15 @@ export async function shortenUrl(req, res) {
 
     try {
 
-        const validation = urlSchema.validate(req.body);
-
-        if (validation.error) {
-
-            res.sendStatus(422);
-            return;
-
-        }
+        const VISIT_COUNT = 0;
 
         const shortUrl = nanoid(8).toLowerCase();
 
         const { userId } = res.locals;
 
-        const query = `INSERT INTO urls (url, "shortUrl", "customerId") VALUES ($1, $2, $3)`;
+        const query = `INSERT INTO urls (url, "shortUrl", "visitCount", "customerId") VALUES ($1, $2, $3)`;
 
-        await connection.query(query, [req.body.url, shortUrl, userId])
+        await connection.query(query, [req.body.url, shortUrl, VISIT_COUNT, userId]);
 
         res.status(201).send({ shortUrl });
 

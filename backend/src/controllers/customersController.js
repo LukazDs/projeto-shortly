@@ -2,22 +2,12 @@ import connection from "../dbStrategy/database.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { customerSchema } from "../schemas/customerSchema.js";
 
 dotenv.config();
 
 export async function insertCustomer(req, res) {
 
     try {
-
-        const validation = customerSchema.validate(req.body);
-
-        if (validation.error) {
-
-            res.sendStatus(422);
-            return;
-
-        }
 
         const { name, email, password } = req.body;
 
