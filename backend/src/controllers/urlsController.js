@@ -14,7 +14,7 @@ export async function shortenUrl(req, res) {
 
         const { userId } = res.locals;
 
-        const query = `INSERT INTO urls (url, "shortUrl", "visitCount", "customerId") VALUES ($1, $2, $3)`;
+        const query = `INSERT INTO urls (url, "shortUrl", "visitCount", "customerId") VALUES ($1, $2, $3, $4)`;
 
         await connection.query(query, [req.body.url, shortUrl, VISIT_COUNT, userId]);
 
